@@ -2,14 +2,20 @@ const express = require('express');
 const router = express.Router();
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const keys = require('../../config/keys');
 
 // Load User model
 const User = require('../../models/User');
+
+/**********************************************************************************************************/
 
 // @route   GET api/auth/test
 // @desc    Tests Auth route
 // @access  Public
 router.get('/test', (req, res) => res.json({ message: 'Auth route works' }));
+
+/**********************************************************************************************************/
 
 // @route   GET api/auth/register
 // @desc    Register user
@@ -48,6 +54,8 @@ router.post('/register', (req, res) => {
   });
 });
 
+/**********************************************************************************************************/
+
 // @route   GET api/auth/login
 // @desc    Login user / Returning JWT
 // @access  Public
@@ -65,12 +73,32 @@ router.post('/login', (req, res) => {
     // Check password
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
-        res.json({ message: 'Success' });
+        // User matched
+        // Create JWT payload
+        const payload = {
+          id: user.id,
+          name: user.name,
+          avatar: user.avatar
+        };
+        // Sign the token
+        jwt.sign(
+          payload,
+          keys.secretOrKey,
+          { expiresIn: 3600 },
+          (err, token) => {
+            res.json({
+              success: true,
+              token: `Bearer ${token}`
+            });
+          }
+        );
       } else {
         return res.status(400).json({ password: 'Password incorrect' });
       }
     });
   });
 });
+
+/**********************************************************************************************************/
 
 module.exports = router;
