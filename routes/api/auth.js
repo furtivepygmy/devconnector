@@ -9,20 +9,26 @@ const passport = require('passport');
 // Load User model
 const User = require('../../models/User');
 
-/**********************************************************************************************************/
+// Load input validation
+const validateRegisterInput = require('../../validation/register');
+const validateLoginInput = require('../../validation/login');
 
-// @route   GET api/auth/test
-// @desc    Tests Auth route
-// @access  Public
-router.get('/test', (req, res) => res.json({ message: 'Auth route works' }));
+/************************************************************************/
 
-/**********************************************************************************************************/
-
-// @route   GET api/auth/register
+// @route   POST api/auth/register
 // @desc    Register user
 // @access  Public
 router.post('/register', (req, res) => {
-  // first find if the email exists using findOne
+  //
+  // Validation
+  //
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  if (!isValid) {
+    res.status(400).json(errors);
+  }
+
+  // First find if the email exists using findOne
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({ email: 'Email already exists' });
@@ -33,7 +39,7 @@ router.post('/register', (req, res) => {
         d: 'mm' // Default
       });
 
-      // create a new resource with mongoose
+      // Create a new resource with mongoose
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
@@ -58,12 +64,21 @@ router.post('/register', (req, res) => {
   });
 });
 
-/**********************************************************************************************************/
+/************************************************************************/
 
-// @route   GET api/auth/login
+// @route   POST api/auth/login
 // @desc    Login user / Returning JWT
 // @access  Public
 router.post('/login', (req, res) => {
+  //
+  // Validation
+  //
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const email = req.body.email;
   const password = req.body.password;
 
@@ -71,7 +86,8 @@ router.post('/login', (req, res) => {
   User.findOne({ email }).then(user => {
     // Check for user
     if (!user) {
-      return res.status(404).json({ email: 'User not found' });
+      errors.email = 'User not found';
+      return res.status(404).json(errors);
     }
 
     // Check password
@@ -97,13 +113,14 @@ router.post('/login', (req, res) => {
           }
         );
       } else {
-        return res.status(400).json({ password: 'Password incorrect' });
+        errors.password = 'Password incorrect';
+        return res.status(400).json(errors);
       }
     });
   });
 });
 
-/**********************************************************************************************************/
+/************************************************************************/
 
 // @route   GET api/auth/current
 // @desc    Return current user
@@ -120,6 +137,6 @@ router.get(
   }
 );
 
-/**********************************************************************************************************/
+/************************************************************************/
 
 module.exports = router;
