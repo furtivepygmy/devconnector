@@ -11,6 +11,7 @@ const Profile = require('../../models/Profile');
 
 // Load input validation
 const validateProfileInput = require('../../validation/profile');
+const validateProfileUpdateInput = require('../../validation/update-profile');
 const validateExperienceInput = require('../../validation/experience');
 const validateEducationInput = require('../../validation/education');
 
@@ -31,7 +32,7 @@ router.get(
           errors.noprofile = 'There is no profile for this user';
           return res.status(404).json(errors);
         }
-        res.json(profile);
+        return res.json(profile);
       })
       .catch(err => res.status(404).json(err));
   }
@@ -50,9 +51,10 @@ router.get('/all', (req, res) => {
     .then(profiles => {
       if (!profiles) {
         errors.noprofile = 'There are no profiles';
-        res.status(404).json(errors);
+        return res.status(404).json(errors);
       }
-      res.json(profiles);
+
+      return res.json(profiles);
     })
     .catch(err => res.json(err));
 });
@@ -70,10 +72,10 @@ router.get('/handle/:handle', (req, res) => {
     .then(profile => {
       if (!profile) {
         errors.noprofile = 'There is no profile for this user';
-        res.status(404).json(errors);
+        return res.status(404).json(errors);
       }
 
-      res.json(profile);
+      return res.json(profile);
     })
     .catch(err => res.json(err));
 });
@@ -91,10 +93,10 @@ router.get('/user/:user_id', (req, res) => {
     .then(profile => {
       if (!profile) {
         errors.noprofile = 'There is no profile for this user';
-        res.status(404).json(errors);
+        return res.status(404).json(errors);
       }
 
-      res.json(profile);
+      return res.json(profile);
     })
     .catch(err => res.json({ message: 'There is no profile for this user' }));
 });
@@ -108,15 +110,6 @@ router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    //
-    // Validation
-    //
-    const { errors, isValid } = validateProfileInput(req.body);
-
-    if (!isValid) {
-      res.status(400).json(errors);
-    }
-
     // Get fields
     const profileFields = {};
     profileFields.social = {};
@@ -160,22 +153,20 @@ router.post(
       // If profile exists
       //
       if (profile) {
-        const currentProfile = profile;
+        //
+        // Validation for updating profile fields
+        //
+        const { errors, isValid } = validateProfileUpdateInput(req.body);
+        if (!isValid) {
+          res.status(400).json(errors);
+        }
         //
         // Check if handle exists
         //
         Profile.findOne({ handle: profileFields.handle }).then(profile => {
-          if (profileFields.handle === currentProfile.handle) {
-            Profile.findOneAndUpdate(
-              { user: req.user.id },
-              { $set: profileFields },
-              { new: true }
-            )
-              .then(profile => res.json(profile))
-              .catch(errors => res.json(errors));
-          } else if (profile) {
-            errors.handle = 'That handle already exists';
-            res.status(400).json(errors);
+          if (profile) {
+            errors.handle = 'Handle already exists';
+            return res.status(400).json(errors);
           }
           // Update
           Profile.findOneAndUpdate(
@@ -188,13 +179,21 @@ router.post(
         });
       } else {
         //
+        // Validation for creating new profile fields
+        //
+        const { errors, isValid } = validateProfileInput(req.body);
+        if (!isValid) {
+          return res.status(400).json(errors);
+        }
+
+        //
         // Create new profile
         // Check if handle exists
         //
         Profile.findOne({ handle: profileFields.handle }).then(profile => {
           if (profile) {
             errors.handle = 'That handle already exists';
-            res.status(400).json(errors);
+            return res.status(400).json(errors);
           }
 
           // Save Profile
@@ -220,7 +219,7 @@ router.post(
     const { errors, isValid } = validateExperienceInput(req.body);
 
     if (!isValid) {
-      res.status(400).json(errors);
+      return res.status(400).json(errors);
     }
 
     Profile.findOne({ user: req.user.id })
@@ -267,7 +266,7 @@ router.post(
     const { errors, isValid } = validateEducationInput(req.body);
 
     if (!isValid) {
-      res.status(400).json(errors);
+      return res.status(400).json(errors);
     }
 
     Profile.findOne({ user: req.user.id })

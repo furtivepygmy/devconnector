@@ -25,7 +25,7 @@ router.post('/register', (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
   if (!isValid) {
-    res.status(400).json(errors);
+    return res.status(400).json(errors);
   }
 
   // First find if the email exists using findOne
@@ -106,7 +106,7 @@ router.post('/login', (req, res) => {
           keys.secretOrKey,
           { expiresIn: 3600 },
           (err, token) => {
-            res.json({
+            return res.json({
               success: true,
               token: `Bearer ${token}`
             });
@@ -129,7 +129,7 @@ router.get(
   '/current',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    res.json({
+    return res.json({
       id: req.user.id,
       name: req.user.name,
       email: req.user.email
