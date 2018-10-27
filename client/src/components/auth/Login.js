@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -11,6 +10,12 @@ class Login extends Component {
     password: '',
     errors: {}
   };
+
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
 
   componentDidUpdate(prevProps) {
     // If the user is authenticated then redirect to dashboard
@@ -104,4 +109,4 @@ const mapStateToProps = ({ auth, errors }) => {
 export default connect(
   mapStateToProps,
   { loginUser }
-)(withRouter(Login));
+)(Login);

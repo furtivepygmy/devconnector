@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -13,6 +13,12 @@ class Register extends Component {
     confirmPassword: '',
     errors: {}
   };
+
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.errors !== this.props.errors) {
