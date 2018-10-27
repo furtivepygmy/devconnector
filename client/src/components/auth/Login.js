@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+import { loginUser } from '../../actions/authActions';
 
 class Login extends Component {
   state = {
@@ -8,6 +12,17 @@ class Login extends Component {
     errors: {}
   };
 
+  componentDidUpdate(prevProps) {
+    // If the user is authenticated then redirect to dashboard
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+
+    if (prevProps.errors !== this.props.errors) {
+      this.setState({ errors: this.props.errors });
+    }
+  }
+
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -15,15 +30,12 @@ class Login extends Component {
   onSubmit = event => {
     event.preventDefault();
 
-    const user = {
+    const userData = {
       email: this.state.email,
       password: this.state.password
     };
 
-    axios
-      .post('/api/auth/login', user)
-      .then(res => console.log(res.data))
-      .catch(err => this.setState({ errors: err.response.data }));
+    this.props.loginUser(userData);
   };
 
   render() {
@@ -76,4 +88,20 @@ class Login extends Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = ({ auth, errors }) => {
+  return {
+    auth,
+    errors
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(withRouter(Login));
