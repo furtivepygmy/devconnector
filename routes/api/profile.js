@@ -136,6 +136,7 @@ router.post(
 
     standardFields.forEach(field => {
       if (req.body[field]) profileFields[field] = req.body[field];
+      else profileFields[field] = '';
     });
 
     // Skills - Split into array

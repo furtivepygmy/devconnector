@@ -4,7 +4,7 @@ const isEmpty = require('./is-empty');
 module.exports = function validateProfileInput(data) {
   let errors = {};
 
-  data.handle = !isEmpty(data.handle) ? data.handle : '';
+  data.handle = !isEmpty(data.handle) ? data.handle.toLowerCase() : '';
   data.status = !isEmpty(data.status) ? data.status : '';
   data.skills = !isEmpty(data.skills) ? data.skills : '';
 
@@ -13,7 +13,7 @@ module.exports = function validateProfileInput(data) {
   }
 
   if (Validator.isEmpty(data.handle)) {
-    errors.handle = 'Profile handle is required';
+    errors.handle = 'Profile handle field is required';
   }
 
   if (Validator.isEmpty(data.status)) {
@@ -21,7 +21,7 @@ module.exports = function validateProfileInput(data) {
   }
 
   if (Validator.isEmpty(data.skills)) {
-    errors.skills = 'Skills field is required';
+    errors.skills = 'Please enter atleast one skill';
   }
 
   if (!isEmpty(data.website)) {

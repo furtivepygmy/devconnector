@@ -42,10 +42,8 @@ Landing.propTypes = {
   auth: PropTypes.object.isRequired
 };
 
-const mapStateToProps = ({ auth }) => {
-  return {
-    auth
-  };
-};
+const mapStateToProps = ({ auth }) => ({
+  auth
+});
 
 export default connect(mapStateToProps)(Landing);

@@ -9,9 +9,16 @@ import Footer from './components/layout/Footer';
 import Landing from './components/layout/Landing';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
+import Dashboard from './components/dashboard/Dashboard';
+import CreateProfile from './components/create-profile/CreateProfile';
+import EditProfile from './components/edit-profile/EditProfile';
+
+// Higher order component for protected routes
+import requireAuth from './components/common/RequireAuth';
 
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
+import { clearCurrentProfile } from './actions/profileActions';
 
 import './App.css';
 
@@ -30,7 +37,7 @@ if (localStorage.jwtToken) {
     // Logout user (time out)
     store.dispatch(logoutUser());
     // TODO: CLear current Profile
-
+    store.dispatch(clearCurrentProfile());
     // Redirect to login
     window.location.href = '/login';
   }
@@ -47,6 +54,21 @@ class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route
+                exact
+                path="/create-profile"
+                component={requireAuth(CreateProfile)}
+              />
+              <Route
+                exact
+                path="/edit-profile"
+                component={requireAuth(EditProfile)}
+              />
+              <Route
+                exact
+                path="/dashboard"
+                component={requireAuth(Dashboard)}
+              />
             </div>
             <Footer />
           </div>
