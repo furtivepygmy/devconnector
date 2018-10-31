@@ -136,7 +136,9 @@ router.post(
 
     standardFields.forEach(field => {
       if (req.body[field]) profileFields[field] = req.body[field];
-      else profileFields[field] = '';
+      else {
+        if (field !== 'handle') profileFields[field] = '';
+      }
     });
 
     // Skills - Split into array
@@ -151,7 +153,7 @@ router.post(
     // Search for the User's Profile using logged in user's id
     Profile.findOne({ user: req.user.id }).then(profile => {
       //
-      // If profile exists
+      // If profile already exists
       //
       if (profile) {
         //
@@ -193,7 +195,7 @@ router.post(
         //
         Profile.findOne({ handle: profileFields.handle }).then(profile => {
           if (profile) {
-            errors.handle = 'That handle already exists';
+            errors.handle = 'Profile handle already exists';
             return res.status(400).json(errors);
           }
 

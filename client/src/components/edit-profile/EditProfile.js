@@ -40,8 +40,9 @@ class EditProfile extends Component {
       this.setState({ errors: this.props.errors });
     }
 
+    // We want to load the edit profile form fields with the current profile fields
     if (this.props.profile.profile) {
-      const profile = this.props.profile.profile;
+      const { profile } = this.props.profile;
 
       // Bring skills array back to CSV
       const skillsCSV = profile.skills.join(',');
