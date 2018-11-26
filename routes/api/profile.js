@@ -134,9 +134,12 @@ router.post(
       'instagram'
     ];
 
+    // Set the profile fields
     standardFields.forEach(field => {
       if (req.body[field]) profileFields[field] = req.body[field];
       else {
+        // If the the req.body.field is blank
+        // Set the profile field to an empty string except for the handle
         if (field !== 'handle') profileFields[field] = '';
       }
     });
@@ -146,6 +149,7 @@ router.post(
       profileFields.skills = req.body.skills.split(',');
     }
 
+    // Set the social fields
     socialFields.forEach(field => {
       if (req.body[field]) profileFields.social[field] = req.body[field];
     });

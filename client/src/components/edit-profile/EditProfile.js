@@ -252,13 +252,8 @@ class EditProfile extends Component {
                     }
                     className="btn btn-light"
                   >
-                    {!displaySocialInputs ? (
-                      <span>Add Social Network Links</span>
-                    ) : (
-                      <span>Remove Social Network Links</span>
-                    )}
+                    <span>Edit Social Network Links</span>
                   </button>
-                  <span className="text-muted">Optional</span>
                 </div>
                 {socialInputs}
                 <input
