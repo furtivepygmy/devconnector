@@ -13,6 +13,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import CreateProfile from './components/create-profile/CreateProfile';
 import EditProfile from './components/edit-profile/EditProfile';
 import AddExperience from './components/add-credentials/AddExperience';
+import AddEducation from './components/add-credentials/AddEducation';
 
 // Higher order component for protected routes
 import requireAuth from './components/common/RequireAuth';
@@ -69,6 +70,11 @@ class App extends Component {
                 exact
                 path="/add-experience"
                 component={requireAuth(AddExperience)}
+              />
+              <Route
+                exact
+                path="/add-education"
+                component={requireAuth(AddEducation)}
               />
               <Route
                 exact

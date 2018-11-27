@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
+import { addExperience } from '../../actions/profileActions';
 
 class AddExperience extends Component {
   state = {
     company: '',
     title: '',
-    location: '',
     location: '',
     from: '',
     to: '',
@@ -19,10 +19,26 @@ class AddExperience extends Component {
     disabled: ''
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.errors !== this.props.errors) {
+      this.setState({ errors: this.props.errors });
+    }
+  }
+
   onSubmit = event => {
     event.preventDefault();
 
-    console.log('Submit');
+    const expData = {
+      company: this.state.company,
+      title: this.state.title,
+      location: this.state.location,
+      from: this.state.from,
+      to: this.state.to,
+      current: this.state.current,
+      description: this.state.description
+    };
+
+    this.props.addExperience(expData, this.props.history);
   };
 
   onChange = event => {
@@ -55,7 +71,7 @@ class AddExperience extends Component {
               <form onSubmit={this.onSubmit}>
                 <TextFieldGroup
                   placeholder="* Company"
-                  name="comapany"
+                  name="company"
                   value={this.state.company}
                   onChange={this.onChange}
                   error={errors.company}
@@ -68,7 +84,7 @@ class AddExperience extends Component {
                   error={errors.title}
                 />
                 <TextFieldGroup
-                  placeholder="* Location"
+                  placeholder="Location"
                   name="location"
                   value={this.state.location}
                   onChange={this.onChange}
@@ -128,6 +144,7 @@ class AddExperience extends Component {
 }
 
 AddExperience.propTypes = {
+  addExperience: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -137,4 +154,7 @@ const mapStateToProps = ({ profile, errors }) => ({
   errors
 });
 
-export default connect(mapStateToProps)(withRouter(AddExperience));
+export default connect(
+  mapStateToProps,
+  { addExperience }
+)(withRouter(AddExperience));
