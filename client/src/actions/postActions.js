@@ -5,6 +5,7 @@ import {
   GET_POSTS,
   POST_LOADING,
   DELETE_POST,
+  LIKE_POST,
   GET_ERRORS
 } from './types';
 
@@ -45,7 +46,7 @@ export const addPost = postData => dispatch => {
     );
 };
 
-// Delete a post
+// Delete post
 export const deletePost = id => dispatch => {
   axios
     .delete(`/api/posts/post/${id}`)
@@ -62,6 +63,46 @@ export const deletePost = id => dispatch => {
       })
     );
 };
+
+// Add like
+export const addLike = id => dispatch => {
+  axios
+    .post(`/api/posts/like/${id}`)
+    .then(({ data }) =>
+      dispatch({
+        type: LIKE_POST,
+        payload: data
+      })
+    )
+    .catch(({ response }) =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: response.data
+      })
+    );
+};
+
+// Remove like
+export const removeLike = id => dispatch => {
+  axios
+    .delete(`/api/posts/like/${id}`)
+    .then(({ data }) =>
+      dispatch({
+        type: LIKE_POST,
+        payload: data
+      })
+    )
+    .catch(({ response }) =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: response.data
+      })
+    );
+};
+
+// Add comment
+
+// Delete comment
 
 // Set loading state
 export const setPostLoading = () => {
