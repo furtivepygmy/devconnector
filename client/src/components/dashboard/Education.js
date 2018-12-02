@@ -16,17 +16,17 @@ class Education extends Component {
         <td>{edu.school}</td>
         <td>{edu.degree}</td>
         <td>
-          <Moment format="YYYY/MM/DD">{edu.from}</Moment> -{' '}
+          <Moment format='MMM YYYY'>{edu.from}</Moment> -{' '}
           {edu.to === undefined ? (
             'Now'
           ) : (
-            <Moment format="YYYY/MM/DD">{edu.to}</Moment>
+            <Moment format='MMM YYYY'>{edu.to}</Moment>
           )}
         </td>
         <td>
           <button
             onClick={() => this.onDeleteClick(edu._id)}
-            className="btn btn-danger"
+            className='btn btn-danger'
           >
             Delete
           </button>
@@ -36,8 +36,8 @@ class Education extends Component {
 
     return (
       <div>
-        <h4 className="mb-4">Education Credentials</h4>
-        <table className="table">
+        <h4 className='mb-4'>Education Credentials</h4>
+        <table className='table'>
           <thead>
             <tr>
               <th>School</th>

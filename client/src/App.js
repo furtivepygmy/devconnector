@@ -1,31 +1,32 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import jwt_decode from "jwt-decode";
-import { Provider } from "react-redux";
-import store from "./store";
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
+import { Provider } from 'react-redux';
+import store from './store';
 
-import Navbar from "./components/layout/Navbar";
-import Footer from "./components/layout/Footer";
-import Landing from "./components/layout/Landing";
-import Register from "./components/auth/Register";
-import Login from "./components/auth/Login";
-import Dashboard from "./components/dashboard/Dashboard";
-import CreateProfile from "./components/create-profile/CreateProfile";
-import EditProfile from "./components/edit-profile/EditProfile";
-import AddExperience from "./components/add-credentials/AddExperience";
-import AddEducation from "./components/add-credentials/AddEducation";
-import Profiles from "./components/profiles/Profiles";
-import Profile from "./components/profile/Profile";
-import NotFound from "./components/not-found/NotFound";
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+import Landing from './components/layout/Landing';
+import Register from './components/auth/Register';
+import Login from './components/auth/Login';
+import Dashboard from './components/dashboard/Dashboard';
+import CreateProfile from './components/create-profile/CreateProfile';
+import EditProfile from './components/edit-profile/EditProfile';
+import AddExperience from './components/add-credentials/AddExperience';
+import AddEducation from './components/add-credentials/AddEducation';
+import Profiles from './components/profiles/Profiles';
+import Profile from './components/profile/Profile';
+import Posts from './components/posts/Posts';
+import NotFound from './components/not-found/NotFound';
 
 // Higher order component for protected routes
-import requireAuth from "./components/common/RequireAuth";
+import requireAuth from './components/common/RequireAuth';
 
-import setAuthToken from "./utils/setAuthToken";
-import { setCurrentUser, logoutUser } from "./actions/authActions";
-import { clearCurrentProfile } from "./actions/profileActions";
+import setAuthToken from './utils/setAuthToken';
+import { setCurrentUser, logoutUser } from './actions/authActions';
+import { clearCurrentProfile } from './actions/profileActions';
 
-import "./App.css";
+import './App.css';
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -44,7 +45,7 @@ if (localStorage.jwtToken) {
     // TODO: CLear current Profile
     store.dispatch(clearCurrentProfile());
     // Redirect to login
-    window.location.href = "/login";
+    window.location.href = '/login';
   }
 }
 
@@ -53,40 +54,41 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <div className="App">
+          <div className='App'>
             <Navbar />
-            <Route exact path="/" component={Landing} />
-            <div className="container">
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/profiles" component={Profiles} />
-              <Route exact path="/profile/:handle" component={Profile} />
+            <Route exact path='/' component={Landing} />
+            <div className='container'>
+              <Route exact path='/register' component={Register} />
+              <Route exact path='/login' component={Login} />
+              <Route exact path='/profiles' component={Profiles} />
+              <Route exact path='/profile/:handle' component={Profile} />
+              <Route exact path='/feed' component={requireAuth(Posts)} />
               <Route
                 exact
-                path="/create-profile"
+                path='/create-profile'
                 component={requireAuth(CreateProfile)}
               />
               <Route
                 exact
-                path="/edit-profile"
+                path='/edit-profile'
                 component={requireAuth(EditProfile)}
               />
               <Route
                 exact
-                path="/add-experience"
+                path='/add-experience'
                 component={requireAuth(AddExperience)}
               />
               <Route
                 exact
-                path="/add-education"
+                path='/add-education'
                 component={requireAuth(AddEducation)}
               />
               <Route
                 exact
-                path="/dashboard"
+                path='/dashboard'
                 component={requireAuth(Dashboard)}
               />
-              <Route exact path="/not-found" component={NotFound} />
+              <Route exact path='/not-found' component={NotFound} />
             </div>
             <Footer />
           </div>

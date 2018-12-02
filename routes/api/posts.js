@@ -17,7 +17,6 @@ const validatePostInput = require('../../validation/post');
 router.get('/all', (req, res) => {
   Post.find()
     .sort({ date: 'desc' })
-    .populate('user', ['name', 'avatar'])
     .populate('likes.user', 'name')
     .populate('comments.user', 'name')
     .then(posts => res.json(posts))
@@ -31,11 +30,10 @@ router.get('/all', (req, res) => {
 // @access  Public
 router.get('/post/:id', (req, res) => {
   Post.findById(req.params.id)
-    .populate('user', ['name', 'avatar'])
     .populate('likes.user', 'name')
     .populate('comments.user', 'name')
     .then(post => res.json(post))
-    .catch(errors => res.status(404).json({ postNotFound: 'No post found' }));
+    .catch(err => res.status(404).json({ postNotFound: 'No post found' }));
 });
 
 /************************************************************************/
@@ -58,6 +56,7 @@ router.post(
     const newPost = new Post({
       text: req.body.text,
       name: req.body.name,
+      handle: req.body.handle,
       avatar: req.body.avatar,
       user: req.user.id
     });
