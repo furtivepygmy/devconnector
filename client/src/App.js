@@ -17,6 +17,7 @@ import AddEducation from './components/add-credentials/AddEducation';
 import Profiles from './components/profiles/Profiles';
 import Profile from './components/profile/Profile';
 import Posts from './components/posts/Posts';
+import Post from './components/post/Post';
 import NotFound from './components/not-found/NotFound';
 
 // Higher order component for protected routes
@@ -63,6 +64,7 @@ class App extends Component {
               <Route exact path='/profiles' component={Profiles} />
               <Route exact path='/profile/:handle' component={Profile} />
               <Route exact path='/feed' component={requireAuth(Posts)} />
+              <Route exact path='/post/:id' component={requireAuth(Post)} />
               <Route
                 exact
                 path='/create-profile'
