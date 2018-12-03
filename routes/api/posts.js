@@ -8,6 +8,7 @@ const Post = require('../../models/Post');
 
 // Validation
 const validatePostInput = require('../../validation/post');
+const validateCommentInput = require('../../validation/comment');
 
 /************************************************************************/
 
@@ -166,7 +167,7 @@ router.post(
   '/comment/:id',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    const { errors, isValid } = validatePostInput(req.body);
+    const { errors, isValid } = validateCommentInput(req.body);
 
     // Check validation
     if (!isValid) {
@@ -182,6 +183,7 @@ router.post(
           user: req.user.id,
           text: req.body.text,
           name: req.body.name,
+          handle: req.body.handle,
           avatar: req.body.avatar
         };
 
