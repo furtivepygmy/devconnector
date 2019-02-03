@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-import ProfileHeader from "./ProfileHeader";
-import ProfileAbout from "./ProfileAbout";
-import ProfileCreds from "./ProfileCreds";
-import ProfileGithub from "./ProfileGithub";
-import Spinner from "../common/Spinner";
+import ProfileHeader from './ProfileHeader';
+import ProfileAbout from './ProfileAbout';
+import ProfileCreds from './ProfileCreds';
+import ProfileGithub from './ProfileGithub';
+import Spinner from '../common/Spinner';
 
-import { getProfileByHandle } from "../../actions/profileActions";
+import { getProfileByHandle } from '../../actions/profileActions';
 
 class Profile extends Component {
   componentDidMount() {
@@ -20,7 +20,7 @@ class Profile extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.profile.profile === null && prevProps.profile.loading) {
-      this.props.history.push("/not-found");
+      this.props.history.push('/not-found');
     }
   }
 

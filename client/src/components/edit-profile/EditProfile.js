@@ -1,31 +1,31 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-import TextFieldGroup from "../common/TextFieldGroup";
-import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
-import SelectListGroup from "../common/SelectListGroup";
-import InputGroup from "../common/InputGroup";
+import TextFieldGroup from '../common/TextFieldGroup';
+import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
+import SelectListGroup from '../common/SelectListGroup';
+import InputGroup from '../common/InputGroup';
 
-import { createProfile, getCurrentProfile } from "../../actions/profileActions";
+import { createProfile, getCurrentProfile } from '../../actions/profileActions';
 
 class EditProfile extends Component {
   state = {
     displaySocialInputs: false,
-    handle: "",
-    company: "",
-    website: "",
-    location: "",
-    status: "",
-    skills: "",
-    githubUsername: "",
-    bio: "",
-    twitter: "",
-    facebook: "",
-    linkedIn: "",
-    youtube: "",
-    instagram: "",
+    handle: '',
+    company: '',
+    website: '',
+    location: '',
+    status: '',
+    skills: '',
+    githubUsername: '',
+    bio: '',
+    twitter: '',
+    facebook: '',
+    linkedIn: '',
+    youtube: '',
+    instagram: '',
     errors: {}
   };
 
@@ -44,24 +44,24 @@ class EditProfile extends Component {
       const { profile } = this.props.profile;
 
       // Bring skills array back to CSV
-      const skillsCSV = profile.skills.join(",");
+      const skillsCSV = profile.skills.join(',');
 
       // If profile field doesnt exist, make empty string
       const {
-        handle = "",
-        company = "",
-        website = "",
-        location = "",
-        githubUsername = "",
-        bio = "",
-        status = "",
+        handle = '',
+        company = '',
+        website = '',
+        location = '',
+        githubUsername = '',
+        bio = '',
+        status = '',
         social = {},
         social: {
-          twitter = "",
-          facebook = "",
-          instagram = "",
-          youtube = "",
-          linkedIn = ""
+          twitter = '',
+          facebook = '',
+          instagram = '',
+          youtube = '',
+          linkedIn = ''
         } = {}
       } = profile;
 
@@ -94,7 +94,7 @@ class EditProfile extends Component {
     const profile = this.state;
 
     if (this.state.handle === this.props.profile.profile.handle) {
-      profile.handle = "";
+      profile.handle = '';
     }
 
     this.props.createProfile(profile, this.props.history);
@@ -158,14 +158,14 @@ class EditProfile extends Component {
 
     // Select options for status
     const options = [
-      { label: "Developer", value: "Developer" },
-      { label: "Junior Developer", value: "Junior Developer" },
-      { label: "Senior Developer", value: "Senior Developer" },
-      { label: "Manager", value: "Manager" },
-      { label: "Student or Learning", value: "Student or Learning" },
-      { label: "Instructor or Teacher", value: "Instructor or Teacher" },
-      { label: "Intern", value: "Intern" },
-      { label: "Other", value: "Other" }
+      { label: 'Developer', value: 'Developer' },
+      { label: 'Junior Developer', value: 'Junior Developer' },
+      { label: 'Senior Developer', value: 'Senior Developer' },
+      { label: 'Manager', value: 'Manager' },
+      { label: 'Student or Learning', value: 'Student or Learning' },
+      { label: 'Instructor or Teacher', value: 'Instructor or Teacher' },
+      { label: 'Intern', value: 'Intern' },
+      { label: 'Other', value: 'Other' }
     ];
 
     return (
