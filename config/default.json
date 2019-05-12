@@ -1,0 +1,3 @@
+{
+  "mongoURI": "mongodb+srv://devconnectoradmin:devconnectorpassword@devconnector-doik2.mongodb.net/test?retryWrites=true"
+}
