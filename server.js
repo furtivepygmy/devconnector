@@ -7,6 +7,7 @@ const path = require('path');
 const auth = require('./routes/api/auth');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
+const connectDB = require('./config/db');
 
 const app = express();
 
@@ -14,14 +15,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// DB Config
-const db = require('./config/keys').mongoURI;
-
-// Connect to MongoDB (.connect returns a promise)
-mongoose
-  .connect(db)
-  .then(() => console.log('MongoDB Connected'))
-  .catch(error => console.log(error));
+// Connect database
+connectDB();
 
 // Passport middleware
 app.use(passport.initialize());
@@ -29,10 +24,11 @@ app.use(passport.initialize());
 // Passport config
 require('./config/passport.js')(passport);
 
-// Use Routes
-app.use('/api/auth', auth);
-app.use('/api/profile', profile);
-app.use('/api/posts', posts);
+// Define routes
+app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api/users', require('./routes/api/users'));
+app.use('/api/profile', require('./routes/api/profile'));
+app.use('/api/posts', require('./routes/api/posts'));
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
