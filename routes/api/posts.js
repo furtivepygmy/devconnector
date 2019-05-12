@@ -6,10 +6,6 @@ const passport = require('passport');
 // Load Post model
 const Post = require('../../models/Post');
 
-// Validation
-const validatePostInput = require('../../validation/post');
-const validateCommentInput = require('../../validation/comment');
-
 /************************************************************************/
 
 // @route   GET api/posts/all
@@ -42,14 +38,6 @@ router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    const { errors, isValid } = validatePostInput(req.body);
-
-    // Check validation
-    if (!isValid) {
-      // If any errors, send 400 with errors object
-      return res.status(400).json(errors);
-    }
-
     const newPost = new Post({
       text: req.body.text,
       name: req.body.name,
@@ -167,14 +155,6 @@ router.post(
   '/comment/:id',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    const { errors, isValid } = validateCommentInput(req.body);
-
-    // Check validation
-    if (!isValid) {
-      // If any errors, send 400 with errors object
-      return res.status(400).json(errors);
-    }
-
     const { id } = req.params;
 
     Post.findById(id)
